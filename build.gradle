@@ -4,6 +4,15 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    // configuration that holds jars to include in the jar
+    extraLibs
+}
+
+dependencies {
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.42.0.0'
+    extraLibs group: 'org.xerial', name: 'sqlite-jdbc', version: '3.42.0.0'
+}
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -12,5 +21,8 @@ jar {
     archiveVersion = "0.1"
     manifest {
         attributes 'Main-Class' : 'me.elordenador.todo.Main'
+    }
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
